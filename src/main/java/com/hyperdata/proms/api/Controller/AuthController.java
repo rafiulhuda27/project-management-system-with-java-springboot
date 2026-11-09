@@ -144,5 +144,4 @@ public class AuthController {
         body.put("message", "Logout berhasil");
         return ResponseEntity.ok(body);
     }
-    
 }
