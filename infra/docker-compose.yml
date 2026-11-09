@@ -1,0 +1,21 @@
+# PROMS — lingkungan lokal untuk latihan backend Laravel
+# Jalankan dari root repo: docker compose -f infra/docker-compose.yml up -d
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: proms
+      POSTGRES_USER: proms_owner        # role migrasi = pemilik tabel (JANGAN dipakai aplikasi)
+      POSTGRES_PASSWORD: owner_secret
+    ports: ["${DB_PORT:-5432}:5432"]
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./initdb:/docker-entrypoint-initdb.d:ro   # membuat role login aplikasi saat pertama kali
+  redis:
+    image: redis:7
+    ports: ["6379:6379"]
+  mailpit:                                # tangkap email lokal: http://localhost:8025
+    image: axllent/mailpit
+    ports: ["1025:1025", "8025:8025"]
+volumes:
+  pgdata:
